@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>March Madness Predictor</title>
+    <style>
+body {
+    font-family: 'Arial Black', sans-serif;
+    margin: 0;
+    padding: 20px 0;
+    min-height: 100vh;
+    color: white;
+    text-align: center;
+    position: relative;
+    background: url('MarchMadness.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Dark overlay with gradient for extra depth */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+    z-index: -1;
+}
+
+/* Main title */
+h1 {
+    font-size: 42px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 5px #000, 0 0 15px #00a3e0;
+    margin: 20px 0 10px 0;
+}
+
+/* Paragraph */
+p {
+    font-size: 18px;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+}
+
+/* Wrapper for bracket + button */
+.bracket-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Bracket layout */
+.bracket-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    position: relative;
+}
+
+/* Team boxes */
+.team-box {
+    background: #111;
+    border: 6px solid #00a3e0;
+    width: 300px;
+    padding: 20px 25px;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), 0 0 15px rgba(0,163,224,0.5) inset;
+}
+
+.team-box h2 {
+    color: #00a3e0;
+    font-size: 26px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.team-box input {
+    width: 90%;
+    padding: 8px;
+    margin: 6px 0 10px;
+    font-size: 16px;
+    border: 2px solid #00a3e0;
+    border-radius: 5px;
+    background-color: #111;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.team-box input:focus {
+    outline: none;
+    border-color: #ffca28;
+    box-shadow: 0 0 10px #ffca28;
+    background-color: #222;
+}
+
+/* Winner box */
+.winner-box {
+    background: #000;
+    border: 6px solid #ffca28;
+    padding: 30px;
+    width: 260px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), 0 0 20px rgba(255,202,40,0.6) inset;
+    position: relative;
+}
+
+.winner-box h2 {
+    color: #ffca28;
+    font-size: 28px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+#result {
+    font-size: 30px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 2px 2px 5px black, 0 0 10px #ffca28;
+    min-height: 40px;
+}
+
+/* Predict button */
+#predictButton {
+    background: #00a3e0;
+    color: white;
+    padding: 18px 45px;
+    border-radius: 10px;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 10px rgba(0,163,224,0.7);
+}
+
+#predictButton:hover {
+    background: #0082b8;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00a3e0, 0 0 30px #00a3e0 inset;
+}
+
+.bracket-line {
+    position: absolute;
+    top: 50%;  /* vertical center */
+    left: 0;
+    width: 100%; /* full width of container */
+    height: 6px; /* thicker line */
+    background-color: #ffd740; /* brighter yellow */
+    box-shadow:
+        0 0 6px #ffd740,
+        0 0 12px #ffd740,
+        0 0 24px #ffe082,
+        0 0 36px #ffe082,
+        0 0 48px #fff176,
+        0 0 60px #fff176;
+    z-index: -1;
+}
+
+    </style>
+</head>
+<body>
+    <h1>March Madness Predictor</h1>
+    <p>Enter stats for both teams to get a predicted winner.</p>
+
+    <div class="bracket-wrapper">
+        <div class="bracket-container">
+            <!-- Horizontal bracket line -->
+            <div class="bracket-line"></div>
+
+            <!-- Team A -->
+            <div class="team-box" id="teamA">
+                <h2>Team A</h2>
+                SEED: <input type="number" id="SEED_A" min="1" max="16" value="1"><br>
+                AdjEM: <input type="number" id="AdjEM_A" step="0.01" value="0"><br>
+                AdjTempo: <input type="number" id="AdjTempo_A" step="0.01" value="0"><br>
+                FG2Pct: <input type="number" id="FG2Pct_A" step="0.01" value="0"><br>
+                ORPct: <input type="number" id="ORPct_A" step="0.01" value="0"><br>
+                TOPct: <input type="number" id="TOPct_A" step="0.01" value="0"><br>
+            </div>
+
+            <!-- Winner Box -->
+            <div class="winner-box" id="winner">
+                <h2>Predicted Winner</h2>
+                <div id="result">?</div>
+            </div>
+
+            <!-- Team B -->
+            <div class="team-box" id="teamB">
+                <h2>Team B</h2>
+                SEED: <input type="number" id="SEED_B" min="1" max="16" value="1"><br>
+                AdjEM: <input type="number" id="AdjEM_B" step="0.01" value="0"><br>
+                AdjTempo: <input type="number" id="AdjTempo_B" step="0.01" value="0"><br>
+                FG2Pct: <input type="number" id="FG2Pct_B" step="0.01" value="0"><br>
+                ORPct: <input type="number" id="ORPct_B" step="0.01" value="0"><br>
+                TOPct: <input type="number" id="TOPct_B" step="0.01" value="0"><br>
+            </div>
+        </div>
+
+        <!-- Predict button -->
+        <button id="predictButton">Predict Winner</button>
+    </div>
+
+    <script src="model.js"></script>
+    <script>
+
+        document.getElementById("predictButton").addEventListener("click", function() {
+        // --- Read inputs ---
+        const SEED_A = parseFloat(document.getElementById("SEED_A").value);
+        const AdjEM_A = parseFloat(document.getElementById("AdjEM_A").value);
+        const AdjTempo_A = parseFloat(document.getElementById("AdjTempo_A").value);
+        const FG2Pct_A = parseFloat(document.getElementById("FG2Pct_A").value);
+        const ORPct_A = parseFloat(document.getElementById("ORPct_A").value);
+        const TOPct_A = parseFloat(document.getElementById("TOPct_A").value);
+
+        const SEED_B = parseFloat(document.getElementById("SEED_B").value);
+        const AdjEM_B = parseFloat(document.getElementById("AdjEM_B").value);
+        const AdjTempo_B = parseFloat(document.getElementById("AdjTempo_B").value);
+        const FG2Pct_B = parseFloat(document.getElementById("FG2Pct_B").value);
+        const ORPct_B = parseFloat(document.getElementById("ORPct_B").value);
+        const TOPct_B = parseFloat(document.getElementById("TOPct_B").value);
+
+        // --- Compute features for Team A perspective ---
+        const featuresA = [
+            AdjEM_A / (AdjTempo_A + 1e-6), // AdjEM_AdjTempo_ratio
+            AdjEM_A,
+            SEED_A,
+            SEED_A * AdjEM_A,              // Seed_AdjEM_interaction
+            FG2Pct_A - FG2Pct_B,
+            ORPct_A,
+            TOPct_A
+        ];
+
+        // --- Compute features for Team B perspective ---
+        const featuresB = [
+            AdjEM_B / (AdjTempo_B + 1e-6),
+            AdjEM_B,
+            SEED_B,
+            SEED_B * AdjEM_B,
+            FG2Pct_B - FG2Pct_A,
+            ORPct_B,
+            TOPct_B
+        ];
+        const scoreA = score(featuresA); // returns numeric score
+        const scoreB = score(featuresB);
+        // --- Compare ---
+        console.log("scoreA:", scoreA, "scoreB:", scoreB);
+
+        const numericScoreA = Array.isArray(scoreA) ? scoreA[1] : scoreA;
+        const numericScoreB = Array.isArray(scoreB) ? scoreB[1] : scoreB;
+        const winner = numericScoreA > numericScoreB ? "Team A" : "Team B";
+
+        document.getElementById("result").textContent = winner + ` (A:${numericScoreA.toFixed(2)} B:${numericScoreB.toFixed(2)})`;
+});
+    </script>
+</body>
+</html>
+
+
+
+
