@@ -1,6 +1,6 @@
 # March Madness First-Round Predictor
 
-[View the full report](From-Stats-To-Brackets.pdf)
+For a detailed overview of the project, see the [full report](From_Stats_To_Brackets.pdf).
 
 
 A **data-driven machine learning model** to predict first-round NCAA Men’s Basketball Tournament outcomes, using historical game results (2008–2025) and KenPom efficiency metrics (2002–2025). The model leverages **feature engineering, Random Forests, and hyperparameter tuning** to provide accurate predictions, outperforming baseline strategies such as always picking the higher seed or prior bracket results.
