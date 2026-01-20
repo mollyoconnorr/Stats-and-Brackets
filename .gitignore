@@ -1,0 +1,15 @@
+# PyCharm / JetBrains IDE files
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Python virtual environments (if any)
+.venv/
+venv/
+__pycache__/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
